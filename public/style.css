@@ -1,0 +1,353 @@
+/* Variables de Tema Globales */
+:root {
+  /* Tema Claro (Default) */
+  --bg-color: #ffffff;
+  --text-color: #202124; /* Google's primary text color */
+  --secondary-text-color: #5f6368;
+  --card-bg: #ffffff;
+  --card-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15);
+  --input-bg: #f1f3f4; /* Lighter grey for input background */
+  --input-border: #dadce0; /* Light border for inputs */
+  --input-text-color: var(--text-color);
+  --button-bg: #1a73e8; /* Google Blue */
+  --button-color: white;
+  --button-hover-bg: #1765cc; /* Darker blue on hover */
+  --link-color: #1a73e8;
+  --error-text-color: #d93025; /* Google error red */
+  --error-bg-color: #fce8e6; /* Light red background for error messages */
+  --theme-switch-bg: #ccc;
+  --theme-switch-slider-bg: white; /* Default slider (sun) */
+
+  /* Tema Oscuro */
+  --dark-bg-color: #202124; /* Google Dark Background */
+  --dark-text-color: #e8eaed; /* Google Dark Text */
+  --dark-secondary-text-color: #9aa0a6;
+  --dark-card-bg: #292a2d; /* Slightly lighter than body for cards */
+  --dark-card-shadow: 0 1px 2px 0 rgba(0,0,0,0.3), 0 2px 6px 2px rgba(0,0,0,0.15);
+  --dark-input-bg: #303134; /* Darker input background */
+  --dark-input-border: #5f6368; /* Lighter border for dark inputs */
+  --dark-input-text-color: var(--dark-text-color);
+  --dark-button-bg: #8ab4f8; /* Lighter Google Blue for dark mode */
+  --dark-button-color: #202124; /* Dark text on light blue button */
+  --dark-button-hover-bg: #9ac0f9;
+  --dark-link-color: #8ab4f8;
+  --dark-error-text-color: #f28b82; /* Lighter red for dark mode errors */
+  --dark-error-bg-color: #3c2827;
+  --dark-theme-switch-bg: #5f6368;
+  --dark-theme-switch-slider-bg: #303134; /* Darker slider (moon) */
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* Ensure theme toggle is at top if body is main flex container */
+  align-items: center;
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+  box-sizing: border-box;
+  padding-top: 70px; /* Space for fixed theme toggle and logout button */
+}
+
+body.dark-mode {
+  --bg-color: var(--dark-bg-color);
+  --text-color: var(--dark-text-color);
+  --secondary-text-color: var(--dark-secondary-text-color);
+  --card-bg: var(--dark-card-bg);
+  --card-shadow: var(--dark-card-shadow);
+  --input-bg: var(--dark-input-bg);
+  --input-border: var(--dark-input-border);
+  --input-text-color: var(--dark-input-text-color);
+  --button-bg: var(--dark-button-bg);
+  --button-color: var(--dark-button-color);
+  --button-hover-bg: var(--dark-button-hover-bg);
+  --link-color: var(--dark-link-color);
+  --error-text-color: var(--dark-error-text-color);
+  --error-bg-color: var(--dark-error-bg-color);
+  --theme-switch-bg: var(--dark-theme-switch-bg);
+  --theme-switch-slider-bg: var(--dark-theme-switch-slider-bg);
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-grow: 1; /* Takes remaining space */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.card {
+  background-color: var(--card-bg);
+  padding: 32px 40px;
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  max-width: 400px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 20px; /* Space if multiple cards/elements */
+}
+
+.card.text-center {
+  text-align: center;
+}
+
+h1 {
+  font-size: 24px; /* Google Sans Display 24sp */
+  font-weight: 400;
+  line-height: 32px;
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: var(--text-color);
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  color: var(--text-color);
+}
+
+.h2-404 { /* Specific style for the 404 number */
+  font-size: 72px;
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  margin-bottom: 0;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="search"] {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px; /* Adjusted padding */
+  margin: 12px 0;
+  background-color: var(--input-bg);
+  color: var(--input-text-color);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  font-size: 16px; /* Material Text Field Text */
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="search"]:focus {
+  border-color: var(--button-bg); /* Use button bg for focus border */
+  box-shadow: 0 0 0 1px var(--button-bg); /* Focus ring */
+  outline: none;
+}
+body.dark-mode input[type="text"]:focus,
+body.dark-mode input[type="password"]:focus,
+body.dark-mode input[type="email"]:focus,
+body.dark-mode input[type="search"]:focus {
+  border-color: var(--dark-button-bg);
+  box-shadow: 0 0 0 1px var(--dark-button-bg);
+}
+
+
+button,
+a.button-link-styled {
+  display: inline-block;
+  padding: 10px 24px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background: var(--button-bg);
+  color: var(--button-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500; /* Medium */
+  text-transform: uppercase;
+  letter-spacing: 0.089em; /* Standard Material letter spacing */
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.08); /* Softer shadow */
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  text-decoration: none; /* For a.button-link-styled */
+  text-align: center;
+}
+
+button:hover,
+a.button-link-styled:hover {
+  background-color: var(--button-hover-bg);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+  text-decoration: none; /* For a.button-link-styled */
+}
+body.dark-mode button:hover,
+body.dark-mode a.button-link-styled:hover {
+  background-color: var(--dark-button-hover-bg);
+}
+
+
+button.full-width {
+  display: block;
+  width: 100%;
+}
+
+/* Mensaje de Error/Informativo */
+.error-message-style {
+  color: var(--error-text-color);
+  background-color: var(--error-bg-color);
+  border: 1px solid var(--error-text-color);
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-top: 16px;
+  font-size: 14px;
+  display: none; /* Hidden by default */
+  text-align: left;
+  line-height: 1.4;
+}
+.error-message-style.show {
+  display: block;
+}
+
+
+/* Botón Logout */
+#logoutBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  background-color: #d93025; /* Google Red for dangerous actions */
+  color: white;
+  z-index: 100;
+  /* Inherits general button styles, specific overrides here */
+}
+body.dark-mode #logoutBtn {
+    background-color: #f28b82; /* Lighter red for dark mode */
+    color: #202124;
+}
+#logoutBtn:hover {
+  background-color: #c5221f;
+}
+body.dark-mode #logoutBtn:hover {
+  background-color: #e57373;
+}
+
+
+/* Switch de Tema */
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px; /* Slightly smaller */
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  background-color: var(--theme-switch-bg);
+  border-radius: 26px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  padding: 3px; /* Padding for icon inside */
+}
+
+.theme-icon {
+  font-size: 16px; /* Icon size */
+  line-height: 1;
+  color: var(--theme-switch-slider-bg); /* Icon color matches slider's "off" state bg */
+  background-color: var(--text-color); /* Circle around icon */
+  border-radius: 50%;
+  width: 20px; /* Circle size */
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, background-color 0.3s;
+  transform: translateX(0px);
+}
+body.dark-mode .theme-icon {
+    background-color: var(--dark-text-color);
+    color: var(--dark-theme-switch-slider-bg);
+}
+
+
+input:checked + .slider {
+  background-color: var(--button-bg);/* Optional: Use accent color when on */
+}
+
+input:checked + .slider .theme-icon {
+  transform: translateX(24px); /* Move distance */
+}
+
+
+/* Animaciones de transición de vistas en home.html */
+#mainContent, #newView {
+  transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+#mainContent.animate-out {
+  transform: translateY(-20px);
+  opacity: 0;
+}
+
+#newView { /* Base state for entry */
+  opacity: 0;
+  transform: translateY(20px);
+  /* display: none; by default through .hidden class initially */
+}
+#newView.animate-in { /* Target state for entry */
+  opacity: 1;
+  transform: translateY(0);
+  display: flex !important; /* Or block, depending on its content structure. Ensure it's visible */
+  flex-direction: column; /* if it's a card */
+  align-items: center; /* if it's a card */
+}
+
+
+.hidden {
+  display: none !important;
+}
+
+.search-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+#teamResult {
+  margin-top: 20px;
+  font-size: 14px;
+  text-align: left;
+  word-break: break-all; /* Para JSON largo */
+}
+#teamResult pre {
+  background-color: var(--input-bg); /* Similar a un input */
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid var(--input-border);
+  white-space: pre-wrap; /* Para que el JSON se ajuste */
+  color: var(--input-text-color);
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicio - VertiTrack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+
+  <script src="firebase-config.js"></script>
+</head>
+<body>
+
+  <button id="logoutBtn">Cerrar sesión</button> <div class="theme-toggle">
+    <label class="switch">
+      <input type="checkbox" id="themeSwitch" />
+      <span class="slider">
+        <span class="theme-icon" id="themeIcon">☀️</span>
+      </span>
+    </label>
+  </div>
+
+  <div class="page-container">
+    <div id="mainContent" class="card">
+      <h1 id="welcomeMessage">Bienvenido</h1>
+
+      <div class="search-section">
+        <input type="text" id="teamIdInput" placeholder="Introduce la ID del equipo" />
+        <button id="searchTeamBtn" class="full-width">Buscar equipo</button>
+        <p id="errorMessage" class="error-message-style">Fallo en la conexión. Intenta de nuevo.</p>
+      </div>
+
+      <div id="teamResult">
+        </div>
+    </div>
+
+    <div id="newView" class="card hidden"> <h2>Work in progress</h2>
+      <p>Esta sección está en desarrollo.</p>
+      </div>
+  </div>
+
+  <script src="theme.js"></script>
+  <script>
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        const name = user.displayName || user.email.split('@')[0];
+        document.getElementById('welcomeMessage').textContent = `Bienvenido, ${name}`;
+      } else {
+        window.location.href = 'index.html';
+      }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      auth.signOut().then(() => {
+        window.location.href = 'index.html';
+      });
+    });
+
+    document.getElementById('searchTeamBtn').addEventListener('click', async () => {
+      const teamId = document.getElementById('teamIdInput').value.trim();
+      const resultDiv = document.getElementById('teamResult');
+      const errorMsg = document.getElementById('errorMessage');
+      const mainContent = document.getElementById('mainContent');
+      const newView = document.getElementById('newView');
+
+      errorMsg.classList.remove('show'); // Ocultar mensaje de error anterior
+      resultDiv.textContent = '';
+
+      if (!teamId) {
+        errorMsg.textContent = 'Por favor, introduce una ID.';
+        errorMsg.classList.add('show');
+        return;
+      }
+
+      // Caso especial "f-35"
+      if (teamId.toLowerCase() === 'f-35') {
+        mainContent.classList.add('animate-out');
+        setTimeout(() => {
+          mainContent.style.display = 'none';
+          mainContent.classList.remove('animate-out');
+          
+          newView.classList.remove('hidden'); // Quitar display:none si estaba
+          newView.classList.add('animate-in'); // Animar entrada
+        }, 400); // Duración de la animación de salida
+        return;
+      }
+
+      try {
+        const doc = await db.collection('equipos').doc(teamId).get();
+        if (doc.exists) {
+          resultDiv.innerHTML = `<p><strong>Equipo encontrado:</strong></p><pre>${JSON.stringify(doc.data(), null, 2)}</pre>`; // Mostrar datos formateados
+          
+          mainContent.classList.add('animate-out');
+          setTimeout(() => {
+            mainContent.style.display = 'none';
+            mainContent.classList.remove('animate-out');
+
+            newView.classList.remove('hidden');
+            newView.classList.add('animate-in');
+          }, 400);
+
+        } else {
+          errorMsg.textContent = 'No se encontró ningún equipo con esa ID.';
+          errorMsg.classList.add('show');
+        }
+      } catch (error) {
+        console.error('Error al buscar el equipo:', error);
+        errorMsg.textContent = 'Fallo en la conexión o al buscar el equipo. Intenta de nuevo.';
+        errorMsg.classList.add('show');
+      }
+    });
+  </script>
+</body>
+</html>
